@@ -12,13 +12,56 @@
 
 <div id="app" class="container">
   <h1>vue-resourceTest</h1>
-  <a href="javascript:;" class="btn-primary">Get Test</a>
-  <a href="javascript:;" class="btn-primary">Post Test</a>
-  <a href="javascript:;" class="btn-primary">JSONP Test</a>
+  <a href="javascript:;" class="btn-primary" v-on:click="get">Get Test</a>
+  <a href="javascript:;" class="btn-primary" @click="post">Post Test</a>
+  <a href="javascript:;" class="btn-primary" @click="jsonp">JSONP Test</a>
+  <span>{{this.msg}}</span>
 </div>
 <script>
   new Vue({
-    el:"#app" //10.16
+    el:"#app", //10.16
+    data:{
+      msg:''
+    },
+    mounted() {
+      Vue.http.interceptors.push(function (request,next) {
+        console.log("request init.")
+        next(function (response) {
+          console.log("response init.")
+          return response
+        });
+      });
+    },
+    methods:{
+      get:function () {
+        this.$http.get("package1.json",{
+          params:{
+            userId:"101"
+          },
+          headers:{
+            token:"abcd"
+          }
+        }).then(res=>{
+          this.msg = res.data;
+        },error=>{
+          this.msg = error;
+        })
+      },
+      post(){
+        this.$http.post("package.json",{
+          userId:"102"
+        },{
+          headers:{
+            access_token:"abc"
+          }
+        }).then(res=>{
+          this.msg = res.data
+        });
+      },
+      jsonp(){
+
+      }
+    }
   })
 </script>
 </body>
