@@ -19,10 +19,10 @@ mongoose.connection.on("disconnected", () => {
 })
 
 //查询商品
-router.get("/", (req, res, next) => {
+router.get("/list", (req, res, next) => {
   let page = parseInt(req.param("page"))
   let pageSize = parseInt(req.param("pageSize"))
-  var sort = req.param("sort")
+  let sort = req.param("sort")
   let skip = (page - 1) * pageSize
   let priceLevel = req.param("priceLevel")
   let priceGt = '', priceLte = ''
@@ -80,7 +80,6 @@ router.post("/addCart", (req, res, next) => {
   let User = require('../models/user')
 
   User.findOne({userId: userId}, (err, userDoc) => {
-    console.log(res)
     if (err) {
       res.json({
         status: "1",

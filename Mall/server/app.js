@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var ejs =require('ejs')
 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var goods = require('./routes/goods');
@@ -21,6 +22,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.use((req,res,next)=>{
+  if (req.cookies.userId) {
+    next()
+  }else {
+     if (req.originalUrl==='/users/login'||req.originalUrl==='/users/logOut'||req.originalUrl.indexOf('/goods/list')>-1){
+       next()
+     }else {
+       res.json({
+         status:'10001',
+         msg:'当前未登录',
+         result:''
+       })
+     }
+  }
+})
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
