@@ -23,6 +23,9 @@
     export default {
       props:["mdShow"],
         data(){
+        return{
+
+        }
         },
       methods:{
         closeModal(){
